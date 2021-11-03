@@ -3,10 +3,6 @@ import Board from '../models/Board'
 
 const router = express.Router()
 
-router.get('/', (req, res) => {
-	return res.send('d')
-})
-
 router.post('/', async (req, res) => {
 	try {
 		const { title, content, user } = req.body
@@ -22,6 +18,16 @@ router.post('/', async (req, res) => {
 		})
 		await newPost.save()
 		return res.status(200).json({ message: '성공' })
+	} catch (error) {
+		console.error(error)
+		return res.status(500).send(error)
+	}
+})
+
+router.get('/', async (req, res) => {
+	try {
+		const board = await Board.find()
+		return res.status(200).send(board)
 	} catch (error) {
 		console.error(error)
 		return res.status(500).send(error)
