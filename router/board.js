@@ -3,12 +3,14 @@ import Board from '../models/Board'
 
 const router = express.Router()
 
+//
 router.post('/', async (req, res) => {
 	try {
+		//req.body 는 front에서 오는거임
 		const { title, content, user } = req.body
 
 		if (!title || !content || !user) {
-			return res.status(400).json({ message: '실패' })
+			return res.status(400).json({ message: '빈 값이 있으면 안됩니다.' })
 		}
 
 		const newPost = await Board.create({

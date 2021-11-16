@@ -6,12 +6,15 @@ import hpp from 'hpp'
 import helmet from 'helmet'
 import { PORT, MONGO_URI } from './config'
 import board from './router/board'
+import notice from './router/notice'
 
 const app = express()
 const origin = 'http://localhost:3000'
 
+// 14, 15번은 보안설정 코드
 app.use(hpp())
 app.use(helmet())
+// cors코드
 app.use(cors({ origin, credentials: true }))
 app.use(morgan('dev'))
 app.use(express.json())
@@ -23,6 +26,7 @@ const server = async () => {
 		console.log('몽구스 연결 확인')
 
 		app.use('/board', board)
+		app.use('/notice', notice)
 
 		app.listen(PORT, () => {
 			return console.log(`express 서버 시작 ${PORT}`)
