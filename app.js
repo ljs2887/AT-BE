@@ -7,6 +7,7 @@ import helmet from 'helmet'
 import { PORT, MONGO_URI } from './config'
 import board from './router/board'
 import notice from './router/notice'
+import comment from './router/comment'
 
 const app = express()
 const origin = 'http://localhost:3000'
@@ -27,6 +28,7 @@ const server = async () => {
 
 		app.use('/board', board)
 		app.use('/notice', notice)
+		app.use('/comment', comment)
 
 		app.listen(PORT, () => {
 			return console.log(`express 서버 시작 ${PORT}`)

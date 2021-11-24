@@ -41,6 +41,7 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
 	try {
 		const { id } = req.params
+		await Board.updateOne({ postId: id }, { $inc: { hits: 1 } })
 		const board = await Board.findOne({ postId: id })
 		return res.status(200).send(board)
 	} catch (error) {

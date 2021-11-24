@@ -10,7 +10,8 @@ const boardSchema = new mongoose.Schema({
 	title: { type: String, required: true },
 	content: { type: String, required: true },
 	date: { type: String, default: dateSet },
-	user: { type: String, required: true }
+	user: { type: String, required: true },
+	hits: { type: Number, default: 0 }
 })
 
 const Board = mongoose.model('board', boardSchema)
