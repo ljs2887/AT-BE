@@ -42,4 +42,15 @@ router.get('/:id', async (req, res) => {
 	}
 })
 
+router.delete('/:id', async (req, res) => {
+	try {
+		const { id } = req.params
+		await Comment.findByIdAndDelete(id)
+		return res.status(200).send('삭제성공')
+	} catch (error) {
+		console.error(error)
+		return res.status(500).send(error)
+	}
+})
+
 export default router
