@@ -53,4 +53,34 @@ router.delete('/:id', async (req, res) => {
 	}
 })
 
+router.get('/:id/one', async (req, res) => {
+	try {
+		const { id } = req.params
+		if (!isValidObjectId(id)) {
+			return res.status(400).json({ message: '게시물이 없습니다.' })
+		}
+		const comment = await Comment.findById(id)
+		console.log(comment)
+		return res.status(200).json(comment)
+	} catch (error) {
+		console.error(error)
+		return res.status(500).send(error)
+	}
+})
+
+router.put('/:id/one', async (req, res) => {
+	try {
+		const { id } = req.params
+		const { content, user } = req.body
+		if (content === '' || user === '') {
+			return res.status(400).send('빈 값이 있으면 안됩니다')
+		}
+		await Comment.updateOne({ _id: id }, { user: user, content: content })
+		return res.status(200).send('성공')
+	} catch (error) {
+		console.error(error)
+		return res.status(500).send(error)
+	}
+})
+
 export default router
