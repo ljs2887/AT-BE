@@ -1,12 +1,10 @@
 import express from 'express'
-import Comment from '../models/Comment'
+import SuggestionsComment from '../models/SuggestionsComment'
 import { isValidObjectId } from 'mongoose'
-import Board from '../models/Board'
+import Suggestions from '../models/Suggestions'
 
 const router = express.Router()
 
-// POST /comment/:id
-// 프론트에서 값 백으로 넘김
 router.post('/:id', async (req, res) => {
 	try {
 		const { id } = req.params
@@ -17,16 +15,16 @@ router.post('/:id', async (req, res) => {
 		if (content === '' || user === '' || password === '') {
 			return res.status(400).send('빈 값이 있으면 안됩니다')
 		}
-		// board의 _id를 가지고옴
-		const board = await Board.findById(id)
-		const comment = await Comment.create({
+		// suggestions _id를 가지고옴
+		const suggestions = await Suggestions.findById(id)
+		const suggestionsComment = await SuggestionsComment.create({
 			content: content,
 			user: user,
-			board: board,
+			suggestions: suggestions,
 			password: password
 		})
-		await comment.save()
-		return res.status(200).json(comment)
+		await suggestionsComment.save()
+		return res.status(200).json(suggestionsComment)
 	} catch (error) {
 		console.error(error)
 		return res.status(500).send(error)
@@ -39,10 +37,10 @@ router.get('/:id', async (req, res) => {
 		if (!isValidObjectId(id)) {
 			return res.status(400).json({ message: '게시물이 없습니다.' })
 		}
-		const comment = await Comment.find({
-			board: id
+		const suggestionsComment = await SuggestionsComment.find({
+			suggestions: id
 		})
-		return res.status(200).json(comment)
+		return res.status(200).json(suggestionsComment)
 	} catch (error) {
 		console.error(error)
 		return res.status(500).send(error)
@@ -53,11 +51,11 @@ router.delete('/:id', async (req, res) => {
 	try {
 		const { id } = req.params
 		const { password } = req.query
-		const comment = await Comment.findById(id)
-		if (password !== comment.password) {
+		const suggestionsComment = await SuggestionsComment.findById(id)
+		if (password !== suggestionsComment.password) {
 			return res.status(400).send('비밀번호가 틀립니다')
 		}
-		await Comment.findByIdAndDelete(id)
+		await SuggestionsComment.findByIdAndDelete(id)
 		return res.status(200).send('삭제성공')
 	} catch (error) {
 		console.error(error)
@@ -71,8 +69,10 @@ router.get('/:id/one', async (req, res) => {
 		if (!isValidObjectId(id)) {
 			return res.status(400).json({ message: '게시물이 없습니다.' })
 		}
-		const comment = await Comment.findById(id, { password: 0 })
-		return res.status(200).json(comment)
+		const suggestionsComment = await SuggestionsComment.findById(id, {
+			password: 0
+		})
+		return res.status(200).json(suggestionsComment)
 	} catch (error) {
 		console.error(error)
 		return res.status(500).send(error)
@@ -86,11 +86,14 @@ router.put('/:id/one', async (req, res) => {
 		if (content === '' || user === '' || password === '') {
 			return res.status(400).send('빈 값이 있으면 안됩니다')
 		}
-		const exComment = await Comment.findById(id)
-		if (password !== exComment.password) {
+		const exsuggestionsComment = await SuggestionsComment.findById(id)
+		if (password !== exsuggestionsComment.password) {
 			return res.status(400).send('비밀번호가 틀립니다')
 		}
-		await Comment.updateOne({ _id: id }, { user: user, content: content })
+		await SuggestionsComment.updateOne(
+			{ _id: id },
+			{ user: user, content: content }
+		)
 		return res.status(200).send('성공')
 	} catch (error) {
 		console.error(error)

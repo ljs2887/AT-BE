@@ -5,7 +5,7 @@ import shortId from 'shortid'
 const dateSet = moment().format('YYYY-MM-DD')
 const postId = shortId.generate()
 
-const noticeSchema = new mongoose.Schema({
+const suggestionSchema = new mongoose.Schema({
 	postId: { type: String, default: postId },
 	title: { type: String, required: true },
 	content: { type: String, required: true },
@@ -14,6 +14,6 @@ const noticeSchema = new mongoose.Schema({
 	hits: { type: Number, default: 0 }
 })
 
-const Notice = mongoose.model('notice', noticeSchema)
+const Suggestion = mongoose.model('suggestion', suggestionSchema)
 
-export default Notice
+export default Suggestion
